@@ -17,7 +17,6 @@ import java.time.Duration;
 
 @Service
 public class OrderFulfillmentService {
-
     @Autowired
     private PurchaseOrderRepository orderRepository;
 
@@ -27,7 +26,7 @@ public class OrderFulfillmentService {
     @Autowired
     private UserClient userClient;
 
-    public Mono<PurchaseOrderResponseDto> processOrder(Mono<PurchaseOrderRequestDto> requestDtoMono){
+    public Mono<PurchaseOrderResponseDto> processOrder(Mono<PurchaseOrderRequestDto> requestDtoMono) {
         return requestDtoMono.map(RequestContext::new)
                 .flatMap(this::productRequestResponse)
                 .doOnNext(EntityDtoUtil::setTransactionRequestDto)
@@ -38,14 +37,14 @@ public class OrderFulfillmentService {
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
-    private Mono<RequestContext> productRequestResponse(RequestContext rc){
+    private Mono<RequestContext> productRequestResponse(RequestContext rc) {
         return this.productClient.getProductById(rc.getPurchaseOrderRequestDto().getProductId())
                 .doOnNext(rc::setProductDto)
                 .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(1)))
                 .thenReturn(rc);
     }
 
-    private Mono<RequestContext> userRequestResponse(RequestContext rc){
+    private Mono<RequestContext> userRequestResponse(RequestContext rc) {
         return this.userClient.authorizeTransaction(rc.getTransactionRequestDto())
                 .doOnNext(rc::setTransactionResponseDto)
                 .thenReturn(rc);

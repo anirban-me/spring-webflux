@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class InputValidationHandler {
 
     @ExceptionHandler(InputValidationException.class)
-    public ResponseEntity<InputFailedValidationResponse> handleException(InputValidationException ex){
+    public ResponseEntity<InputFailedValidationResponse> handleException(InputValidationException ex) {
         InputFailedValidationResponse response = new InputFailedValidationResponse();
         response.setErrorCode(ex.getErrorCode());
         response.setInput(ex.getInput());

@@ -16,7 +16,6 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("order")
 public class PurchaseOrderController {
-
     @Autowired
     private OrderFulfillmentService orderFulfillmentService;
 
@@ -24,15 +23,16 @@ public class PurchaseOrderController {
     private OrderQueryService queryService;
 
     @PostMapping
-    public Mono<ResponseEntity<PurchaseOrderResponseDto>> order(@RequestBody Mono<PurchaseOrderRequestDto> requestDtoMono){
+    public Mono<ResponseEntity<PurchaseOrderResponseDto>> order(@RequestBody Mono<PurchaseOrderRequestDto> requestDtoMono) {
         return this.orderFulfillmentService.processOrder(requestDtoMono)
-                                .map(ResponseEntity::ok)
-                                .onErrorReturn(WebClientResponseException.class, ResponseEntity.badRequest().build())
-                                .onErrorReturn(WebClientRequestException.class, ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build());
+                .map(ResponseEntity::ok)
+                .onErrorReturn(WebClientResponseException.class, ResponseEntity.badRequest().build())
+                .onErrorReturn(WebClientRequestException.class, ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build());
     }
 
-    @GetMapping("user/{userId}")
-    public Flux<PurchaseOrderResponseDto> getOrdersByUserId(@PathVariable int userId){
+
+    @GetMapping(value = "user/{userId}")
+    public Flux<PurchaseOrderResponseDto> getOrdersByUserId(@PathVariable int userId) {
         return this.queryService.getProductsByUserId(userId);
     }
 

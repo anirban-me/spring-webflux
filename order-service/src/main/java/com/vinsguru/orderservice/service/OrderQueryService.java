@@ -10,11 +10,10 @@ import reactor.core.scheduler.Schedulers;
 
 @Service
 public class OrderQueryService {
-
     @Autowired
     private PurchaseOrderRepository orderRepository;
 
-    public Flux<PurchaseOrderResponseDto> getProductsByUserId(int userId){
+    public Flux<PurchaseOrderResponseDto> getProductsByUserId(int userId) {
         return Flux.fromStream(() -> this.orderRepository.findByUserId(userId).stream()) // blocking
                 .map(EntityDtoUtil::getPurchaseOrderResponseDto)
                 .subscribeOn(Schedulers.boundedElastic());

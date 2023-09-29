@@ -19,24 +19,30 @@ public class ReactiveMathController {
     private ReactiveMathService mathService;
 
     @GetMapping("square/{input}")
-    public Mono<Response> findSquare(@PathVariable int input){
+    public Mono<Response> findSquare(@PathVariable int input) {
         return this.mathService.findSquare(input)
-                        .defaultIfEmpty(new Response(-1));
+                .defaultIfEmpty(new Response(-1));
     }
 
+    // sends the data as a whole. it "collects" all data first and then returns
     @GetMapping("table/{input}")
-    public Flux<Response> multiplicationTable(@PathVariable int input){
+    public Flux<Response> multiplicationTable(@PathVariable int input) {
         return this.mathService.multiplicationTable(input);
+        // IMP: Backend won't process further if the subscriber (client here) cancels the request unlike non-reactive
     }
 
+    // sends data as and when the data is ready, as a stream
     @GetMapping(value = "table/{input}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Response> multiplicationTableStream(@PathVariable int input) {
         return this.mathService.multiplicationTable(input);
+        // IMP: Backend won't process further if the subscriber (client here) cancels the request unlike non-reactive
     }
 
     @PostMapping("multiply")
     public Mono<Response> multiply(@RequestBody Mono<MultiplyRequestDto> requestDtoMono,
-                                   @RequestHeader Map<String, String> headers){
+                                   @RequestHeader Map<String, String> headers) {
+        // Support for mono in request body - springboot reads request in non-blocking
+        // Header access remains same
         System.out.println(headers);
         return this.mathService.multiply(requestDtoMono);
     }

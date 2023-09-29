@@ -9,16 +9,15 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class ProductClient {
-
     private final WebClient webClient;
 
-    public ProductClient(@Value("${product.service.url}") String url){
+    public ProductClient(@Value("${product.service.url}") String url) {
         this.webClient = WebClient.builder()
                 .baseUrl(url)
                 .build();
     }
 
-    public Mono<ProductDto> getProductById(final String productId){
+    public Mono<ProductDto> getProductById(final String productId) {
         return this.webClient
                 .get()
                 .uri("{id}", productId)
@@ -26,12 +25,12 @@ public class ProductClient {
                 .bodyToMono(ProductDto.class);
     }
 
-    public Flux<ProductDto> getAllProducts(){
+    public Flux<ProductDto> getAllProducts() {
         return this.webClient
-                    .get()
-                    .uri("all")
-                    .retrieve()
-                    .bodyToFlux(ProductDto.class);
+                .get()
+                .uri("all")
+                .retrieve()
+                .bodyToFlux(ProductDto.class);
     }
 
 }

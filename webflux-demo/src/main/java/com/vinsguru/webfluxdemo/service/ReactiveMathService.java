@@ -11,23 +11,23 @@ import java.time.Duration;
 @Service
 public class ReactiveMathService {
 
-    public Mono<Response> findSquare(int input){
-        return Mono.fromSupplier(() -> input * input)
-                    .map(Response::new);
+    public Mono<Response> findSquare(int input) {
+        return Mono.fromSupplier(() -> input * input) // whenever there is computation, do fromSupplier() and not just()
+                .map(Response::new);
     }
 
-    public Flux<Response> multiplicationTable(int input){
+    public Flux<Response> multiplicationTable(int input) {
         return Flux.range(1, 10)
-                    .delayElements(Duration.ofSeconds(1))
-                    //.doOnNext(i -> SleepUtil.sleepSeconds(1))
-                    .doOnNext(i -> System.out.println("reactive-math-service processing : " + i))
-                    .map(i -> new Response(i * input));
+                .delayElements(Duration.ofSeconds(1))
+                //.doOnNext(i -> SleepUtil.sleepSeconds(1))
+                .doOnNext(i -> System.out.println("reactive-math-service processing : " + i))
+                .map(i -> new Response(i * input));
     }
 
-    public Mono<Response> multiply(Mono<MultiplyRequestDto> dtoMono){
+    public Mono<Response> multiply(Mono<MultiplyRequestDto> dtoMono) {
         return dtoMono
-                    .map(dto -> dto.getFirst() * dto.getSecond())
-                    .map(Response::new);
+                .map(dto -> dto.getFirst() * dto.getSecond())
+                .map(Response::new);
     }
 
 }
