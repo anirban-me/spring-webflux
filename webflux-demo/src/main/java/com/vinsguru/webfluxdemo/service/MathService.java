@@ -10,16 +10,16 @@ import java.util.stream.IntStream;
 @Service
 public class MathService {
 
-    public Response findSquare(int input){
+    public Response findSquare(int input) {
         return new Response(input * input);
     }
 
-    public List<Response> multiplicationTable(int input){
+    public List<Response> multiplicationTable(int input) {
         return IntStream.rangeClosed(1, 10)
-                    .peek(i -> SleepUtil.sleepSeconds(1))
-                    .peek(i -> System.out.println("math-service processing : " + i))
-                    .mapToObj(i -> new Response(i * input))
-                    .collect(Collectors.toList());
+                .peek(i -> SleepUtil.sleepSeconds(1))
+                .peek(i -> System.out.println("math-service processing : " + i))
+                .mapToObj(i -> new Response(i * input))
+                .collect(Collectors.toList());
     }
 
 

@@ -23,6 +23,7 @@ public class ReactiveMathValidationController {
         if (input < 10 || input > 20)
             throw new InputValidationException(input); // this is outside the reactive pipeline
         // can be handled by the traditional exception handler
+
         return this.mathService.findSquare(input);
     }
 

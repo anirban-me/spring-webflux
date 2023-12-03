@@ -12,7 +12,7 @@ public class ParamsController {
 
     @GetMapping("search")
     public Flux<Integer> searchJobs(@RequestParam("count") int count,
-                           @RequestParam("page") int page){
+                                    @RequestParam("page") int page) {
         return Flux.just(count, page);
     }
 

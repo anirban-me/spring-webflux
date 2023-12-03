@@ -18,14 +18,14 @@ public class MathController {
     private MathService mathService;
 
     @GetMapping("square/{input}")
-    public Response findSquare(@PathVariable int input){
-        if(input < 10)
+    public Response findSquare(@PathVariable int input) {
+        if (input < 10)
             throw new IllegalArgumentException();
         return this.mathService.findSquare(input);
     }
 
     @GetMapping("table/{input}")
-    public List<Response> multiplicationTable(@PathVariable int input){
+    public List<Response> multiplicationTable(@PathVariable int input) {
         return this.mathService.multiplicationTable(input);
     }
 
